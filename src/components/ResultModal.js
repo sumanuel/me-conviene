@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal, Pressable, ScrollView, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { RADIUS, useTheme } from "../theme";
 import ResultCard from "./ResultCard";
 import { Txt } from "./ui";
@@ -7,6 +8,7 @@ import { Txt } from "./ui";
 /** Muestra la tarjeta de resultado sobre un fondo atenuado. */
 export default function ResultModal({ visible, onClose, ...cardProps }) {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   return (
     <Modal
       visible={visible}
@@ -14,6 +16,7 @@ export default function ResultModal({ visible, onClose, ...cardProps }) {
       animationType="fade"
       onRequestClose={onClose}
       statusBarTranslucent
+      navigationBarTranslucent
     >
       <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.6)" }}>
         {/* Tocar fuera de la tarjeta cierra el modal */}
@@ -27,7 +30,11 @@ export default function ResultModal({ visible, onClose, ...cardProps }) {
             flexGrow: 1,
             justifyContent: "center",
             alignItems: "center",
-            padding: 20,
+            // El modal cubre toda la pantalla: se respetan el notch y los botones del sistema.
+            paddingTop: insets.top + 20,
+            paddingBottom: insets.bottom + 20,
+            paddingLeft: insets.left + 20,
+            paddingRight: insets.right + 20,
           }}
           showsVerticalScrollIndicator={false}
         >

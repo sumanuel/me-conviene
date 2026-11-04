@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Keyboard, Linking, Platform, Pressable, ScrollView, Share, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { RADIUS, useTheme } from "../theme";
 import { compare } from "../logic/calc";
@@ -9,6 +7,7 @@ import { formatAmountInput, formatVes, parseNumber } from "../logic/format";
 import { buildShareText } from "../logic/share";
 import { DOLLAR_SOURCE_NAME, STORE_SOURCE_NAME, useApp } from "../context/AppContext";
 import { useFieldChain, useKeyboardHeight } from "../hooks/useFieldChain";
+import Header from "../components/Header";
 import Icon from "../components/Icon";
 import KeyboardAccessory from "../components/KeyboardAccessory";
 import ResultModal from "../components/ResultModal";
@@ -61,7 +60,6 @@ function RateTile({ label, source, text, onPress }) {
 
 export default function HomeScreen() {
   const { colors } = useTheme();
-  const insets = useSafeAreaInsets();
   const kbHeight = useKeyboardHeight();
   const scrollRef = useRef(null);
 
@@ -182,46 +180,48 @@ export default function HomeScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.page }}>
       <StatusBar style={colors.statusBar} />
+      <Header
+        logo
+        title="Me conviene"
+        subtitle="¿Dólares o bolívares?"
+        right={
+          <Pressable
+            onPress={clearAll}
+            disabled={!hasData}
+            accessibilityRole="button"
+            accessibilityLabel="Limpiar precios"
+            accessibilityState={{ disabled: !hasData }}
+            hitSlop={8}
+            style={({ pressed }) => ({
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 6,
+              minHeight: 38,
+              paddingHorizontal: 14,
+              borderRadius: RADIUS.pill,
+              backgroundColor: colors.chip,
+              opacity: !hasData ? 0.45 : pressed ? 0.7 : 1,
+            })}
+          >
+            <Icon name="trash" size={16} color={colors.textSecondary} />
+            <Txt size={12.5} weight={700} color={colors.textSecondary}>
+              Limpiar
+            </Txt>
+          </Pressable>
+        }
+      />
       <ScrollView
         ref={scrollRef}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         contentContainerStyle={{
-          paddingTop: insets.top + 12,
+          paddingTop: 14,
           paddingBottom: 110 + kbHeight,
           paddingHorizontal: 16,
           alignItems: "center",
         }}
       >
         <View style={{ width: "100%", maxWidth: 520, gap: 14 }}>
-          {/* Cabecera */}
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 4 }}>
-            <LinearGradient
-              colors={[colors.accent, colors.accentDark]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: 14,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Txt size={22} weight={800} color={colors.onAccent}>
-                $
-              </Txt>
-            </LinearGradient>
-            <View style={{ flex: 1 }}>
-              <Txt size={22} weight={800} style={{ letterSpacing: -0.4 }} accessibilityRole="header">
-                Me conviene
-              </Txt>
-              <Txt size={12.5} color={colors.textSecondary}>
-                ¿Dólares o bolívares? Decide en segundos
-              </Txt>
-            </View>
-          </View>
-
           {/* Modo */}
           <View style={{ gap: 8 }}>
             <Segmented options={MODES} value={mode} onChange={setMode} />
@@ -256,29 +256,6 @@ export default function HomeScreen() {
               <Txt size={15} weight={800}>
                 Precio en la tienda
               </Txt>
-              <Pressable
-                onPress={clearAll}
-                disabled={!hasData}
-                accessibilityRole="button"
-                accessibilityLabel="Limpiar precios"
-                accessibilityState={{ disabled: !hasData }}
-                hitSlop={8}
-                style={({ pressed }) => ({
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 6,
-                  minHeight: 36,
-                  paddingHorizontal: 12,
-                  borderRadius: RADIUS.pill,
-                  backgroundColor: colors.chip,
-                  opacity: !hasData ? 0.45 : pressed ? 0.7 : 1,
-                })}
-              >
-                <Icon name="trash" size={15} color={colors.textSecondary} />
-                <Txt size={12} weight={700} color={colors.textSecondary}>
-                  Limpiar
-                </Txt>
-              </Pressable>
             </View>
             <Segmented options={PRICE_MODES} value={priceMode} onChange={setPriceMode} />
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { BackHandler, KeyboardAvoidingView, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context";
 import * as SplashScreen from "expo-splash-screen";
 import {
   useFonts,
@@ -89,7 +89,9 @@ function Root() {
 
 export default function App() {
   return (
-    <SafeAreaProvider>
+    // initialWindowMetrics: los márgenes seguros están listos desde el primer cuadro,
+    // sin que la barra inferior "salte" cuando se miden.
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <ThemeProvider>
         <Root />
       </ThemeProvider>

@@ -1,11 +1,11 @@
 import React, { useMemo, useRef } from "react";
 import { ActivityIndicator, Keyboard, Pressable, ScrollView, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { RADIUS, useTheme } from "../theme";
 import { useApp } from "../context/AppContext";
 import { formatAmountInput, formatDecimalVe, formatVes, timeAgo } from "../logic/format";
 import { useFieldChain, useKeyboardHeight } from "../hooks/useFieldChain";
+import Header from "../components/Header";
 import Icon from "../components/Icon";
 import KeyboardAccessory from "../components/KeyboardAccessory";
 import { Card, Field, Notice, RateChip, Txt } from "../components/ui";
@@ -42,7 +42,6 @@ function RateValue({ value, note }) {
 
 export default function RatesScreen() {
   const { colors } = useTheme();
-  const insets = useSafeAreaInsets();
   const kbHeight = useKeyboardHeight();
   const scrollRef = useRef(null);
 
@@ -83,56 +82,50 @@ export default function RatesScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.page }}>
       <StatusBar style={colors.statusBar} />
+      <Header
+        title="Tasas"
+        subtitle="Tienda y dólar"
+        right={
+          <Pressable
+            onPress={() => refresh(rates)}
+            disabled={refreshing}
+            accessibilityRole="button"
+            accessibilityLabel="Actualizar tasas"
+            hitSlop={8}
+            style={({ pressed }) => ({
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 6,
+              minHeight: 38,
+              paddingHorizontal: 14,
+              borderRadius: RADIUS.pill,
+              backgroundColor: colors.accentSoft,
+              opacity: pressed ? 0.75 : 1,
+            })}
+          >
+            {refreshing ? (
+              <ActivityIndicator size="small" color={colors.accentFg} />
+            ) : (
+              <Icon name="refresh" size={16} color={colors.accentFg} />
+            )}
+            <Txt size={12.5} weight={700} color={colors.accentFg}>
+              {refreshing ? "Actualizando…" : rates?.fetchedAt ? timeAgo(rates.fetchedAt) : "Actualizar"}
+            </Txt>
+          </Pressable>
+        }
+      />
       <ScrollView
         ref={scrollRef}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
         contentContainerStyle={{
-          paddingTop: insets.top + 12,
+          paddingTop: 14,
           paddingBottom: 32 + kbHeight,
           paddingHorizontal: 16,
           alignItems: "center",
         }}
       >
         <View style={{ width: "100%", maxWidth: 520, gap: 14 }}>
-          {/* Cabecera */}
-          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingVertical: 4 }}>
-            <View style={{ flex: 1 }}>
-              <Txt size={22} weight={800} style={{ letterSpacing: -0.4 }} accessibilityRole="header">
-                Tasas
-              </Txt>
-              <Txt size={12.5} color={colors.textSecondary}>
-                Elige qué tasa usar en cada caso
-              </Txt>
-            </View>
-            <Pressable
-              onPress={() => refresh(rates)}
-              disabled={refreshing}
-              accessibilityRole="button"
-              accessibilityLabel="Actualizar tasas"
-              hitSlop={8}
-              style={({ pressed }) => ({
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 6,
-                minHeight: 40,
-                paddingHorizontal: 14,
-                borderRadius: RADIUS.pill,
-                backgroundColor: colors.accentSoft,
-                opacity: pressed ? 0.75 : 1,
-              })}
-            >
-              {refreshing ? (
-                <ActivityIndicator size="small" color={colors.accentFg} />
-              ) : (
-                <Icon name="refresh" size={16} color={colors.accentFg} />
-              )}
-              <Txt size={12} weight={700} color={colors.accentFg}>
-                {refreshing ? "Actualizando…" : rates?.fetchedAt ? timeAgo(rates.fetchedAt) : "Actualizar"}
-              </Txt>
-            </Pressable>
-          </View>
-
           {offline && !rates ? (
             <Notice tone="warn" action="Reintentar" onAction={() => refresh(null)}>
               Sin conexión. Escribe las tasas a mano.

@@ -23,9 +23,13 @@ export default function TabBar({ active, onChange }) {
         backgroundColor: colors.surface,
         borderTopWidth: 1,
         borderTopColor: colors.border,
-        paddingTop: 8,
-        paddingBottom: Math.max(insets.bottom, 8),
-        paddingHorizontal: 8,
+        paddingTop: 3,
+        // Medidas como la barra de RecuerdaMed. Margen seguro inferior: con gestos el inset es
+        // pequeño y se respeta entero; con los tres botones de Android (inset grande) se recorta
+        // un poco. Mínimo 4 por si el sistema no reporta margen.
+        paddingBottom: Math.max(insets.bottom >= 40 ? insets.bottom - 14 : insets.bottom, 4),
+        paddingLeft: insets.left + 8,
+        paddingRight: insets.right + 8,
       }}
     >
       {TABS.map((t) => {
@@ -37,12 +41,12 @@ export default function TabBar({ active, onChange }) {
             accessibilityRole="tab"
             accessibilityState={{ selected: on }}
             accessibilityLabel={t.label}
-            style={{ flex: 1, alignItems: "center", gap: 4, minHeight: 52 }}
+            style={{ flex: 1, alignItems: "center", gap: 0 }}
           >
             <View
               style={{
-                width: 60,
-                height: 30,
+                width: 52,
+                height: 24,
                 borderRadius: RADIUS.pill,
                 alignItems: "center",
                 justifyContent: "center",
@@ -51,12 +55,17 @@ export default function TabBar({ active, onChange }) {
             >
               <Icon
                 name={t.icon}
-                size={22}
+                size={20}
                 color={on ? colors.accentFg : colors.muted}
                 strokeWidth={t.icon === "more" ? 3.6 : on ? 2.1 : 1.8}
               />
             </View>
-            <Txt size={11.5} weight={on ? 800 : 600} color={on ? colors.text : colors.muted}>
+            <Txt
+              size={11}
+              weight={on ? 800 : 600}
+              color={on ? colors.text : colors.muted}
+              style={{ lineHeight: 13 }}
+            >
               {t.label}
             </Txt>
           </Pressable>

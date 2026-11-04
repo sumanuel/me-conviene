@@ -1,8 +1,8 @@
 import React from "react";
 import { ScrollView, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { RADIUS, useTheme } from "../theme";
+import Header from "../components/Header";
 import Icon from "../components/Icon";
 import { Card, Segmented, Txt } from "../components/ui";
 import app from "../../app.json";
@@ -44,31 +44,22 @@ function SectionTitle({ icon, children }) {
 
 export default function MoreScreen() {
   const { colors, isDark, pref, setPref } = useTheme();
-  const insets = useSafeAreaInsets();
   // Amarillo de la app; en modo claro un tono más profundo para que se lea sobre blanco.
   const brand = isDark ? colors.accent : colors.accentDark;
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.page }}>
       <StatusBar style={colors.statusBar} />
+      <Header title="Más" subtitle="Apariencia e información de la app" />
       <ScrollView
         contentContainerStyle={{
-          paddingTop: insets.top + 12,
+          paddingTop: 14,
           paddingBottom: 32,
           paddingHorizontal: 16,
           alignItems: "center",
         }}
       >
         <View style={{ width: "100%", maxWidth: 520, gap: 14 }}>
-          <View style={{ paddingVertical: 4 }}>
-            <Txt size={22} weight={800} style={{ letterSpacing: -0.4 }} accessibilityRole="header">
-              Más
-            </Txt>
-            <Txt size={12.5} color={colors.textSecondary}>
-              Apariencia e información de la app
-            </Txt>
-          </View>
-
           {/* Apariencia */}
           <Card style={{ gap: 12 }}>
             <SectionTitle icon="moon">Apariencia</SectionTitle>
