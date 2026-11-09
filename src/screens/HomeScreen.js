@@ -9,6 +9,7 @@ import { DOLLAR_SOURCE_NAME, STORE_SOURCE_NAME, useApp } from "../context/AppCon
 import { useFieldChain, useKeyboardHeight } from "../hooks/useFieldChain";
 import Header from "../components/Header";
 import Icon from "../components/Icon";
+import IntroCard from "../components/IntroCard";
 import KeyboardAccessory from "../components/KeyboardAccessory";
 import ResultModal from "../components/ResultModal";
 import { Card, Field, Segmented, ToggleRow, Txt } from "../components/ui";
@@ -65,6 +66,9 @@ export default function HomeScreen() {
 
   const {
     setTab,
+    ready,
+    introSeen,
+    setIntroSeen,
     mode,
     setMode,
     priceMode,
@@ -231,6 +235,17 @@ export default function HomeScreen() {
                 : "Compara pagar con tus dólares contra venderlos para pagar en bolívares."}
             </Txt>
           </View>
+
+          {/* Primera vez: explica las dos tasas (se muestra una sola vez) */}
+          {ready && !introSeen ? (
+            <IntroCard
+              onDismiss={() => setIntroSeen(true)}
+              onGo={() => {
+                setIntroSeen(true);
+                setTab("rates");
+              }}
+            />
+          ) : null}
 
           {/* Tasas activas (se cambian en la pestaña Tasas) */}
           <View style={{ flexDirection: "row", gap: 10 }}>

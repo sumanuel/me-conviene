@@ -145,6 +145,9 @@ export default function RatesScreen() {
               <Txt size={12.5} color={colors.textSecondary}>
                 La que usa la tienda para pasar su precio en dólares a bolívares. Normalmente es la oficial.
               </Txt>
+              <Txt size={12} color={colors.muted}>
+                Ejemplo: la tienda marca US$ 100 y te cobra los bolívares a la tasa BCV.
+              </Txt>
             </View>
 
             <View style={{ flexDirection: "row", gap: 8 }}>
@@ -194,6 +197,11 @@ export default function RatesScreen() {
                 {have
                   ? "A cómo puedes vender tus dólares: en Binance o en físico."
                   : "A cómo consigues tú los dólares: en Binance o en físico."}
+              </Txt>
+              <Txt size={12} color={colors.muted}>
+                {have
+                  ? "Ejemplo: si pagas en bolívares, antes vendes tus dólares a esta tasa."
+                  : "Ejemplo: para pagar en dólares, antes compras esos dólares a esta tasa."}
               </Txt>
             </View>
 

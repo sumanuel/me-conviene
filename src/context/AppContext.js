@@ -42,6 +42,8 @@ export function AppProvider({ children }) {
   const [refreshing, setRefreshing] = useState(false);
   const [offline, setOffline] = useState(false);
   const [ready, setReady] = useState(false);
+  // Tarjeta de bienvenida de Inicio: se muestra una sola vez.
+  const [introSeen, setIntroSeen] = useState(false);
 
   const side = mode === "have" ? "sell" : "buy";
 
@@ -68,6 +70,7 @@ export function AppProvider({ children }) {
       if (prefs.priceMode) setPriceMode(prefs.priceMode);
       if (prefs.commission) setCommission(prefs.commission);
       if (prefs.igtf) setIgtf(true);
+      if (prefs.introSeen) setIntroSeen(true);
       if (prefs.storeSource) setStoreSource(prefs.storeSource);
       if (prefs.storeManual) setStoreManual(prefs.storeManual);
       if (prefs.dollarSource) setDollarSource(prefs.dollarSource);
@@ -93,8 +96,12 @@ export function AppProvider({ children }) {
       storeManual,
       dollarSource,
       fisicoText,
+      introSeen,
     });
-  }, [ready, mode, priceMode, commission, igtf, storeSource, storeManual, dollarSource, fisicoText]);
+  }, [
+    ready, mode, priceMode, commission, igtf, storeSource, storeManual, dollarSource, fisicoText,
+    introSeen,
+  ]);
 
   // Valores derivados: texto mostrado y número de cada tasa.
   const storeRateText = storeSource === "bcv" ? fmt(rates?.bcv?.buy) : storeManual;
@@ -134,11 +141,14 @@ export function AppProvider({ children }) {
       dollarRateText,
       storeRate,
       dollarRate,
+      ready,
+      introSeen,
+      setIntroSeen,
     }),
     [
       tab, mode, side, priceMode, commission, igtf, storeSource, storeManual, dollarSource,
       fisicoText, rates, refresh, refreshing, offline, stale, storeRateText, dollarRateText,
-      storeRate, dollarRate,
+      storeRate, dollarRate, ready, introSeen,
     ],
   );
 
