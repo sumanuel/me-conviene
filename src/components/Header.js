@@ -47,15 +47,15 @@ export default function Header({ title, subtitle, logo = false, right = null }) 
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={{
-              width: 40,
-              height: 40,
+              width: 42,
+              height: 42,
               borderRadius: 13,
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <Txt size={20} weight={800} color={colors.onAccent}>
-              $
+            <Txt size={15.5} weight={800} color={colors.onAccent} style={{ letterSpacing: -0.2 }}>
+              VE$
             </Txt>
           </LinearGradient>
         ) : null}
